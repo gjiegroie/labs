@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Опрос посетителя супермаркета</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 30px;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    input[type="number"],
+    select,
+    input[type="file"] {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .checkbox-group,
+    .radio-group {
+      margin-top: 10px;
+    }
+
+    .checkbox-group input,
+    .radio-group input {
+      margin-right: 5px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Анкета для посетителей</h1>
+    <form id="surveyForm">
+      <label for="name">Ваше имя:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="visitDate">Дата и время посещения:</label>
+      <input type="datetime-local" id="visitDate" name="visitDate" required>
+
+      <label>Какие отделы вы посетили:</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="department" value="Овощи">Овощи</label>
+        <label><input type="checkbox" name="department" value="Молочные">Молочные</label>
+        <label><input type="checkbox" name="department" value="Мясо">Мясо</label>
+      </div>
+
+      <label for="satisfaction">Уровень удовлетворённости:</label>
+      <select id="satisfaction" name="satisfaction">
+        <option value="Очень доволен">Очень доволен</option>
+        <option value="Доволен">Доволен</option>
+        <option value="Не очень">Не очень</option>
+      </select>
+
+      <label>Как вы узнали о нас?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="source" value="Реклама" required>Реклама</label>
+        <label><input type="radio" name="source" value="Друзья">Друзья</label>
+        <label><input type="radio" name="source" value="Случайно">Случайно</label>
+      </div>
+
+      <label for="rating">Оцените организацию от 1 до 10:</label>
+      <input type="number" id="rating" name="rating" min="1" max="10" step="1">
+
+      <label for="image">Добавьте изображение (по желанию):</label>
+      <input type="file" id="image" name="image" accept="image/*">
+
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+
+  <script>
+    function getFormData(formData) {
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        if (data[key]) {
+          // группируем повторяющиеся поля (например, checkbox)
+          if (!Array.isArray(data[key])) {
+            data[key] = [data[key]];
+          }
+          data[key].push(value);
+        } else {
+          data[key] = value;
+        }
+      }
+      return data;
+    }
+
+    function saveToLocal(data) {
+      const stored = JSON.parse(localStorage.getItem("surveyData") || "[]");
+      stored.push(data);
+      localStorage.setItem("surveyData", JSON.stringify(stored));
+    }
+
+    function openResultsWindow() {
+      const stored = JSON.parse(localStorage.getItem("surveyData") || "[]");
+      const win = window.open("", "ResultsWindow", "width=800,height=600,resizable=yes");
+
+      if (!win) {
+        alert("Разрешите всплывающие окна.");
+        return;
+      }
+
+      const tableRows = stored.map(entry => {
+        return `
+          <tr>
+            <td>${entry.name || ""}</td>
+            <td>${entry.visitDate || ""}</td>
+            <td>${Array.isArray(entry.department) ? entry.department.join(", ") : entry.department || ""}</td>
+            <td>${entry.satisfaction || ""}</td>
+            <td>${entry.source || ""}</td>
+            <td>${entry.rating || ""}</td>
+          </tr>
+        `;
+      }).join("");
+
+      const html = `
+        <html>
+        <head>
+          <title>Результаты</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+              background-color: #fafafa;
+            }
+            h2 {
+              text-align: center;
+              color: #333;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+            th, td {
+              border: 1px solid #ccc;
+              padding: 10px;
+              text-align: left;
+            }
+            th {
+              background-color: #f0f0f0;
+            }
+          </style>
+        </head>
+        <body>
+          <h2>Результаты опроса</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Имя</th>
+                <th>Дата и время</th>
+                <th>Отделы</th>
+                <th>Удовлетворённость</th>
+                <th>Источник</th>
+                <th>Оценка</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </body>
+        </html>
+      `;
+
+      win.document.write(html);
+      win.document.close();
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = getFormData(formData);
+      saveToLocal(data);
+      openResultsWindow();
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
