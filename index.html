@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Выбор картинки</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header, nav, aside, section, footer {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    header {
+      background-color: #444;
+      color: white;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #ddd;
+    }
+
+    aside {
+      background-color: #eee;
+    }
+
+    section {
+      background-color: #f9f9f9;
+    }
+
+    main {
+      display: grid;
+      grid-template-areas:
+        "header header header"
+        "nav section aside"
+        "footer footer footer";
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      gap: 10px;
+    }
+
+    header.main-header {
+      grid-area: header;
+    }
+
+    nav {
+      grid-area: nav;
+    }
+
+    section {
+      grid-area: section;
+    }
+
+    aside {
+      grid-area: aside;
+    }
+
+    footer.main-footer {
+      grid-area: footer;
+    }
+
+    form label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    form select, button {
+      width: 100%;
+      padding: 5px;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #444;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="main-header">
+      <h1>Выбор изображения и параметров</h1>
+    </header>
+
+    <nav>
+      <p>Вариант 13</p>
+    </nav>
+
+    <section>
+      <header><h2>Настройка</h2></header>
+      <article>
+        <form id="imageForm">
+          <label>Надпись:
+            <select id="caption">
+              <option>Красивый закат</option>
+              <option>Лесной пейзаж</option>
+              <option>Городской вид</option>
+            </select>
+          </label>
+
+          <label>Ширина:
+            <select id="width">
+              <option>200px</option>
+              <option>300px</option>
+              <option>400px</option>
+            </select>
+          </label>
+
+          <label>Цвет рамки:
+            <select id="borderColor">
+              <option>red</option>
+              <option>blue</option>
+              <option>green</option>
+              <option>black</option>
+            </select>
+          </label>
+
+          <label>Прозрачность:
+            <select id="opacity">
+              <option value="1">100%</option>
+              <option value="0.7">70%</option>
+              <option value="0.4">40%</option>
+            </select>
+          </label>
+
+          <label>Изображение:
+            <select id="image">
+              <!-- Замени value на свои настоящие ссылки или локальные пути -->
+              <option value="img1.jpg">Горы</option>
+              <option value="img2.jpg">Озеро</option>
+              <option value="img3.jpg">Пёс</option>
+            </select>
+          </label>
+
+          <button type="button" onclick="showImage()">Показать</button>
+        </form>
+      </article>
+      <footer><small>Секция настроек</small></footer>
+    </section>
+
+    <aside>
+      <p>Дополнительная информация</p>
+    </aside>
+
+    <footer class="main-footer">
+      <p>&copy; 2025 Ваш проект</p>
+    </footer>
+  </main>
+
+  <script>
+    function showImage() {
+      const caption = document.getElementById("caption").value;
+      const width = document.getElementById("width").value;
+      const borderColor = document.getElementById("borderColor").value;
+      const opacity = document.getElementById("opacity").value;
+      const imageUrl = document.getElementById("image").value;
+
+      const newWindow = window.open("", "_blank", "width=800,height=600");
+
+      newWindow.document.write(`
+        <html>
+          <head>
+            <title>Результат</title>
+            <style>
+              body {
+                font-family: Arial;
+                padding: 20px;
+              }
+              img {
+                display: block;
+                margin: 20px auto;
+                border: 5px solid ${borderColor};
+                width: ${width};
+                opacity: ${opacity};
+              }
+              h2 {
+                text-align: center;
+              }
+              ul {
+                list-style-type: square;
+                padding-left: 20px;
+              }
+            </style>
+          </head>
+          <body>
+            <h2>${caption}</h2>
+            <img src="${imageUrl}" alt="Выбранное изображение" />
+            <h3>Выбранные параметры:</h3>
+            <ul>
+              <li><strong>Надпись:</strong> ${caption}</li>
+              <li><strong>Ширина:</strong> ${width}</li>
+              <li><strong>Цвет рамки:</strong> ${borderColor}</li>
+              <li><strong>Прозрачность:</strong> ${opacity}</li>
+              <li><strong>Изображение:</strong> ${imageUrl}</li>
+            </ul>
+          </body>
+        </html>
+      `);
+    }
+  </script>
+</body>
+</html>
