@@ -1,0 +1,79 @@
+body {
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 2rem;
+    background: #f5f7fa;
+    color: #222;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.editor-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.editor-container ol {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.25rem;
+    counter-reset: li;
+}
+
+.editor-container ol li {
+    margin: 0.25rem 0;
+    line-height: 1.4;
+}
+
+.editor-container p {
+    background: #e9f1ff;
+    border-left: 5px solid #3b82f6;
+    padding: 0.5rem 0.75rem;
+    margin: 0.25rem 0;
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.control-panel {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.field-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+input[type="text"],
+select {
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+}
+
+button {
+    cursor: pointer;
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+    transition: transform 0.15s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
