@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Промо‑акция | Таймер обратного отсчёта</title>
+    <style>
+        :root {
+            --primary: #6200ee;
+            --primary-dark: #4b00c9;
+            --accent: #ff5252;
+            --bg: #f5f5f5;
+            --text-dark: #212121;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg);
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: var(--text-dark);
+        }
+
+        #promo {
+            width: 420px;
+            background: #fff;
+            border-radius: 1.25rem;            /* 20px */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100%   { transform: translateY(0) rotate(0deg); }
+            50%        { transform: translateY(-5px) rotate(0.2deg); }
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 0 0 1rem;
+        }
+
+        #promoImg {
+            width: 100%;
+            border-radius: 0.75rem;           /* 12px */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .1);
+            transition: transform .4s ease;
+        }
+        #promoImg:hover {
+            transform: scale(1.03);
+        }
+
+        #timer {
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            margin: 1.2rem 0;
+        }
+
+        #msg {
+            min-height: 1.5em;
+            font-size: 1rem;
+            margin-top: 1rem;
+            color: var(--accent);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        button {
+            padding: .6rem 1.8rem;
+            border: none;
+            border-radius: 1rem;              /* 16px */
+            font-size: 1rem;
+            cursor: pointer;
+            background: var(--primary);
+            color: #fff;
+            transition: background .2s ease;
+        }
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        input[type="number"] {
+            width: 90px;
+            padding: .45rem .6rem;
+            border: 1px solid #ccc;
+            border-radius: .65rem;            /* 10px */
+            text-align: center;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="promo">
+        <h2>🔥 Супер‑скидка на товар!</h2>
+        <img id="promoImg" alt="promo image" />
+
+        <div id="timer">00:00:00:00</div>
+
+        <label>
+            Период напоминания n (сек):
+            <input type="number" id="intervalInput" value="10" min="1" step="1" />
+        </label>
+
+        <div class="controls">
+            <button id="startBtn">Старт</button>
+            <button id="stopBtn">Пауза</button>
+        </div>
+
+        <div id="msg"></div>
+    </div>
+
+    <script>
+
+        const PROMO_DURATION_MS = 3 * 24 * 60 * 60 * 1000; 
+
+        const images = new Map([
+            ["default", "https://picsum.photos/400/200?random=1"],
+            ["alt",     "https://picsum.photos/400/200?random=2"]
+        ]);
+
+        const shownReminders = new Set();
+
+        document.getElementById("promoImg").src = images.get("default");
+
+
+        let endTime    = null; 
+        let timerId    = null;  
+        let reminderId = null;  
+
+        const timerEl = document.getElementById("timer");
+        const msgEl   = document.getElementById("msg");
+
+
+        function formatTime(ms) {
+            const totalSec = Math.max(0, Math.floor(ms / 1000));
+            const d = Math.floor(totalSec / 86400);
+            const h = Math.floor((totalSec % 86400) / 3600);
+            const m = Math.floor((totalSec % 3600) / 60);
+            const s = totalSec % 60;
+            return `${String(d).padStart(2, "0")}:${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+        }
+
+
+        function updateTimer() {
+            const diff = endTime - Date.now();
+            timerEl.textContent = formatTime(diff);
+
+            if (diff <= 0) {
+
+                timerEl.textContent = "00:00:00:00";
+                msgEl.textContent = "⏰ Время акции истекло!";
+                clearTimeout(timerId);
+                clearTimeout(reminderId);
+                return;
+            }
+
+            timerId = setTimeout(updateTimer, 1000);
+        }
+
+
+        function showReminder() {
+            const diff = endTime - Date.now();
+            const daysLeft  = Math.max(0, Math.ceil(diff / (24 * 60 * 60 * 1000)));
+            const hoursLeft = Math.max(0, Math.ceil((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)));
+            const text = `До конца акции осталось ${daysLeft} д. ${hoursLeft} ч.`;
+
+            shownReminders.add(text);
+            msgEl.textContent = text;
+
+            const nMs = Number(document.getElementById("intervalInput").value) * 1000;
+            reminderId = setTimeout(showReminder, nMs);
+        }
+
+        function startPromo() {
+            if (!endTime) {
+                endTime = Date.now() + PROMO_DURATION_MS;
+            }
+            updateTimer(); 
+            showReminder();  
+        }
+
+        function stopPromo() {
+            clearTimeout(timerId);
+            clearTimeout(reminderId);
+        }
+
+        document.getElementById("startBtn").addEventListener("click", startPromo);
+        document.getElementById("stopBtn").addEventListener("click",  stopPromo);
+    </script>
+</body>
+</html>
