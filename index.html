@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Blocks Editor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>Конструктор тематических блоков</h1>
+  <aside class="controls">
+    <label>
+      Выберите блок:
+      <select id="block-select"></select>
+    </label>
+
+    <label>
+      Стиль блока:
+      <select id="style-select"></select>
+    </label>
+
+    <label>
+      Фон:
+      <select id="bg-select"></select>
+    </label>
+
+    <label>
+      Заголовок:
+      <select id="title-select"></select>
+    </label>
+
+    <label>
+      Текст параграфа:
+      <select id="text-select"></select>
+    </label>
+
+    <button id="apply-btn">Применить</button>
+  </aside>
+  <main id="block-wrapper"></main>
+
+  <script src="js/blocks.js" defer></script>
+</body>
+</html>
