@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Города — обработка массива</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>Обработка списка городов</h1>
+
+  <form id="cityForm">
+    <label>
+      Введите названия городов (через запятую или с новой строки):
+      <textarea id="cityInput" required></textarea>
+    </label>
+    <button type="submit">Сохранить исходный список</button>
+  </form>
+
+  <section class="lists">
+    <div>
+      <h2>Исходный массив</h2>
+      <ol id="originalList"></ol>
+      <button id="showOriginal">Показать</button>
+    </div>
+
+    <div>
+      <h2>Исправленный массив</h2>
+      <ol id="fixedList"></ol>
+      <button id="fixAndShow">Исправить + Показать</button>
+    </div>
+  </section>
+
+  <script src="js/script.js" defer></script>
+</body>
+</html>
