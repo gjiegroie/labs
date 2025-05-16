@@ -1,0 +1,12 @@
+{
+  "name": "city-project",
+  "version": "1.0.0",
+  "description": "Client-server DHTML project to display city names before and after processing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
