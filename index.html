@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cargo Services Editor</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <h1>Редактор услуг грузоперевозки</h1>
+
+    <div id="cargo-editor" class="editor-container"></div>
+    <div class="control-panel">
+        <div class="field-group">
+            <label for="service-input">Новая услуга:</label>
+            <input type="text" id="service-input" placeholder="Введите название услуги" />
+            <label for="list-select">Поместить в список:</label>
+            <select id="list-select">
+                <option value="0">1</option>
+                <option value="1">2</option>
+                <option value="2">3</option>
+            </select>
+            <button id="add-service-btn">Добавить услугу</button>
+        </div>
+
+        <div class="field-group">
+            <label for="desc-input">Новое описание (3‑5 слов):</label>
+            <input type="text" id="desc-input" placeholder="Введите описание" />
+            <label for="paragraph-position">Позиция параграфа:</label>
+            <select id="paragraph-position">
+                <option value="before">До первого</option>
+                <option value="after">После последнего</option>
+            </select>
+            <button id="add-desc-btn">Вставить описание</button>
+        </div>
+    </div>
+
+    <script src="js/services.js" defer></script>
+</body>
+</html>
